@@ -35,7 +35,14 @@ For example, we pick **N. Viginia(us-east-1)** for our lab practice.
 
 ### Step 3:
 * Create cloudformation stack: **AWS Console > Cloudformation > Create Stack > from S3 template >
-https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-20180731-vpc-bastion-rds.cfn.yml**
+https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-workshop-20180731-vpc-bastion-rds.cfn.yml**
+* For the stack configuration:
+- Stack Name: Whatever you want to name
+- Environment: dev
+- Availability Zone 1: Pick 1 AZ
+- Availability Zone 2: Pick a different AZ
+- EC2 Key Pair: Select the Key Pair Name you setup in Step 2.
+- DB User/DB Password/DB Name: Please remember what you input.
 * Wait till the stack creation ready, the status will change to `CREATE_COMPLETE`
 
 ### Step 4:
@@ -62,12 +69,13 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-2018
 ### Step 7:
 * Try to create a web server and backend server
 * Create cloudformation stack: **AWS Console > Cloudformation > Create Stack > from S3 template >
-https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-20180731-alb-ec2.cfn.yml**
+https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-workshop-20180731-alb-ec2.cfn.yml**
 * Wait till the stack creation ready, the status will change to `CREATE_COMPLETE`
 
 ### Step 8:
 * Check your web service stack
-* You will find an Application Server, A web server and a backend server
+* You will find an Application Server, A web server and a backend server.
+
 
 ## After Workshop
 1. Disable the Cloudfront distribution for this workshop.
