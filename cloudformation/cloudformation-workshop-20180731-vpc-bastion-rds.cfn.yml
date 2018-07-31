@@ -39,22 +39,6 @@ Parameters:
     MaxLength: 18
     Default: 0.0.0.0/0
 
-  ELBIngressPort:
-    Description: The ELB ingress port used by security groups
-    Type: Number
-    MinValue: 0
-    MaxValue: 65535
-    ConstraintDescription: TCP ports must be between 0 - 65535
-    Default: 80
-
-  AppIngressPort:
-    Description: The application ingress port used by security groups
-    Type: Number
-    MinValue: 0
-    MaxValue: 65535
-    ConstraintDescription: TCP ports must be between 0 - 65535
-    Default: 80
-
   # bastion.cfn.yml parameters
   KeyName:
     Description: EC2 key pair name for bastion host SSH access
@@ -257,37 +241,11 @@ Metadata:
           - DatabaseAlarmEvaluationPeriodSeconds
           - DatabaseAlarmMinFreeSpaceInBytes
           - DatabaseAlarmSwapUsageInBytes
-      - Label:
-          default: Application Global
-        Parameters:
-          - AppIngressPort
-          - AppProtocol
-      - Label:
-          default: Elastic Beanstalk
-        Parameters:
-          - StackType
-          - EbInstanceType
-          - AppS3Bucket
-          - AppS3Key
-          - EC2KeyPairName
-          - AutoScalingMinInstanceCount
-          - AutoScalingMaxInstanceCount
-      - Label:
-          default: Load Balancer
-        Parameters:
-          - ELBIngressPort
-          - SSLCertificateArn
     ParameterLabels:
       AvailabilityZone1:
         default: Availability Zone 1
       AvailabilityZone2:
         default: Availability Zone 2
-      ELBIngressPort:
-        default: Port
-      AppIngressPort:
-        default: Port
-      AppProtocol:
-        default: Protocol
       KeyName:
         default: EC2 Key Pair
       LogRetentionInDays:
@@ -365,8 +323,6 @@ Resources:
         AvailabilityZone1: !Ref AvailabilityZone1
         AvailabilityZone2: !Ref AvailabilityZone2
         SSHFrom: !Ref SSHFrom
-        ELBIngressPort: !Ref ELBIngressPort
-        AppIngressPort: !Ref AppIngressPort
         SingleNatGateway: !If [ IsProd, false, true ]
 
   BastionStack:
@@ -429,14 +385,6 @@ Resources:
         DatabaseAlarmSwapUsageInBytes: !Ref DatabaseAlarmSwapUsageInBytes
     DependsOn: VpcStack
 
-  BastionStack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/alb-tg-ec2-be.cfn.yml
-      Parameters:
-        NetworkStackName: !GetAtt VpcStack.Outputs.Name
-        KeyName: !Ref KeyName
-    DependsOn: VpcStack
 
 Outputs:
 

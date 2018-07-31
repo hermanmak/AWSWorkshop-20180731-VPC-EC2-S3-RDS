@@ -70,16 +70,24 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * Try to create a web server and backend server
 * Create cloudformation stack: **AWS Console > Cloudformation > Create Stack > from S3 template >
 https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-workshop-20180731-alb-ec2.cfn.yml**
+* For the stack configuration:
+- Stack Name: Whatever you want to name, suggest we have "EC2" within the Name
+- Key Name: Pick the same name from Step 2.
+- VPC: Pick the new VPC we created at Step 3. 
+- SSHAllowCIDR: Follow the VPC CIDR
+- Public Subnet 1: Pick one subnet with "public" in name
+- Public Subnet 2: Pick another one with "public" in name
+- Private Subnet: Pick one subnet with "private" in name
 * Wait till the stack creation ready, the status will change to `CREATE_COMPLETE`
 
 ### Step 8:
 * Check your web service stack
-* You will find an Application Server, A web server and a backend server.
-
+* You will find an Application Load Balancer, A web server and a backend server, and also a S3 bucket.
+* In this practice, you can see how to create resource for our basic practice. You can try to understand how we design the network topology, how we devide AZ and subnet.
+* Also, we talked about the security group. 
+* By default, all the network routing rule has been pre-defined, you don't need to do anything. 
+* In this empty stack, you can see what we showed in the first diagram.
 
 ## After Workshop
-1. Disable the Cloudfront distribution for this workshop.
-2. Delete the distribution for this workshop.
-3. Delete files in S3 bucket for this workshop.
-4. Delete ALB and Target Group for this workshop.
-5. Go to Cloudformation and delete stack.
+1. Go to Cloudformation, select your stack and delete stack.
+2. Remember to delete the EC2 one, and the delete the based one.
