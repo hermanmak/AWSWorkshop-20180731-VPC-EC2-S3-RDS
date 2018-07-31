@@ -1,0 +1,272 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  ALB + TargetGroup + WebEC2 + BackendEC2 
+Parameters:
+  VPC:
+    Description: Which VPC you want to place your stack
+    Type: 'AWS::EC2::VPC::Id'
+  PublicSubnet1: 
+    Description: 'Applied Public Subnets-1'
+    Type: 'AWS::EC2::Subnet::Id'
+  PublicSubnet2: 
+    Description: 'Applied Public Subnets-2'
+    Type: 'AWS::EC2::Subnet::Id'
+  PrivateSubnet:
+    Description: 'Applied Private Subnet'
+    Type: 'AWS::EC2::Subnet::Id'
+  KeyName:
+    Description: EC2 Instance SSH Key
+    Type: 'AWS::EC2::KeyPair::KeyName'
+  InstanceType:
+    Description: EC2 instance specs configuration
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+  SSHAllowCIDR:
+    Description: Allow IP CIDR for SSH access
+    Type: String
+    Default: '10.0.0.0/8'
+Mappings:
+  AMIs:
+    us-east-1:
+      Name: ami-14c5486b
+    us-west-1:
+      Name: ami-25110f45
+    ap-northeast-1:
+      Name: ami-8fbab2f3
+    ap-southeast-2:
+      Name: ami-60a26a02
+    eu-central-1:
+      Name: ami-9a91b371
+    eu-west-2:
+      Name: ami-c12dcda6
+Resources:
+  MyWebEC2:
+    Type: 'AWS::EC2::Instance'
+    Metadata:
+      Comment1: Configure the bootstrap helpers to install the Apache Web Server and PHP
+      Comment2: Save website content to /var/www/html/index.php
+      'AWS::CloudFormation::Init':
+        configSets:
+          Install:
+            - Install
+        Install:
+          packages:
+            yum:
+              httpd: []
+              php: []
+          services:
+            sysvinit:
+              httpd:
+                enabled: 'true'
+                ensureRunning: 'true'
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !FindInMap 
+        - AMIs
+        - !Ref 'AWS::Region'
+        - Name
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref SSHInternalSG
+        - !Ref EC2IntHTTPAccessSG
+      Tags:
+        - Key: Name
+          Value: Workshop-180731-Web
+        - Key: Purpose
+          Value: Workshop
+      SubnetId: 
+        !Ref PublicSubnet2
+  MyBackendEC2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !FindInMap 
+        - AMIs
+        - !Ref 'AWS::Region'
+        - Name
+      KeyName: !Ref KeyName
+      IamInstanceProfile: !Ref ListS3BucketsInstanceProfile
+      SecurityGroupIds:
+        - !Ref SSHInternalSG
+      Tags:
+        - Key: Name
+          Value: Workshop-180731-Backend
+        - Key: Purpose
+          Value: Workshop
+      SubnetId: 
+        !Ref PrivateSubnet
+
+
+  SSHInternalSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow SSH access from anywhere
+      SecurityGroupIngress:
+        - FromPort: '22'
+          ToPort: '22'
+          IpProtocol: tcp
+          CidrIp: !Ref SSHAllowCIDR
+      Tags:
+        - Key: Name
+          Value: SSHInternalSG
+        - Key: Purpose
+          Value: Workshop
+      VpcId: !Ref VPC
+
+  ALBExtHTTPAccessSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow HTTP/HTTPS access from anywhere
+      SecurityGroupIngress:
+        - FromPort: '80'
+          ToPort: '80'
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: ALBExtHTTPAccessSG
+        - Key: Purpose
+          Value: Workshop
+      VpcId: !Ref VPC
+      
+  EC2IntHTTPAccessSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow HTTP access from ALB
+      SecurityGroupIngress:
+        - FromPort: '80'
+          ToPort: '80'
+          IpProtocol: tcp
+          CidrIp: !Ref SSHAllowCIDR
+      Tags:
+        - Key: Name
+          Value: EC2IntHTTPAccessSG
+        - Key: Purpose
+          Value: Workshop
+      VpcId: !Ref VPC
+
+
+  TempS3:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: SSHAccessSG
+        - Key: Purpose
+          Value: Workshop
+  MyALB:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    Properties:
+      Scheme: internet-facing
+      Subnets: 
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      SecurityGroups:
+        - !GetAtt 
+          - ALBExtHTTPAccessSG
+          - GroupId
+      Tags:
+        - Key: Name
+          Value: MyWorkshop-ALB-20180731
+        - Key: Purpose
+          Value: Workshop
+      Type: application
+      IpAddressType: ipv4
+  MyTargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      VpcId: !Ref VPC
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: '80'
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        - Key: Name
+          Value: MyWorkshop-TG-20180731
+        - Key: Purpose
+          Value: Workshop
+      Targets:
+        - Id: !Ref MyWebEC2
+          Port: 80
+      TargetType: instance
+      UnhealthyThresholdCount: 6
+      VpcId:
+        !Ref VPC
+  MyALBListener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref MyTargetGroup
+      LoadBalancerArn: !Ref MyALB
+      Port: '80'
+      Protocol: HTTP
+  ListS3BucketsInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref ListS3BucketsRole
+  ListS3BucketsPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: ListS3BucketsPolicy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:*'
+            Resource:
+              - !GetAtt 
+                - TempS3
+                - Arn
+              - !Join 
+                - ''
+                - - !GetAtt 
+                    - TempS3
+                    - Arn
+                  - /*
+          - Effect: Allow
+            Action:
+              - 's3:ListBuckets'
+            Resource: 'arn:aws:s3:::*'
+      Roles:
+        - !Ref ListS3BucketsRole
+  ListS3BucketsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+Outputs:
+  WebEC2:
+    Description: EC2 IP address
+    Value: !GetAtt 
+      - MyWebEC2
+      - PrivateIp
+  BackendEC2:
+    Description: EC2 IP address
+    Value: !GetAtt 
+      - MyBackendEC2
+      - PrivateIp
+  ALBDNSName:
+    Description: Application LoadBalancer Link
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - MyALB
+          - DNSName
