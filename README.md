@@ -96,6 +96,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * By default, all the network routing rule has been pre-defined, you don't need to do anything. 
 * In this empty stack, you can see what we showed in the first diagram.
 
-## After Workshop
-1. Go to Cloudformation, select your stack and delete stack.
-2. Remember to delete the EC2 one, and the delete the based one.
+## After Workshop (Deleting a stack deletes the resources created by the stack!)
+1. Go to Cloudformation, select you stack from step 3 and delete it by selecting > Actions > Delete Stack.
+2. Remember to delete the main stack for the first CloudFormation template we ran (description is VPC + Bastion + EC2 + Database)
+3. Delete the Web Server and Backend Server CloudFormation stack from step 7.
