@@ -51,7 +51,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * You can find a new VPC is created
 * You will find different subnet, with different property and setting.
 * You will find public subnet and private subnet.
-- For example: YOURSTACKNAME-PrivateSubnet1
+* For example: `<YOUR STACK NAME>-PrivateSubnet1`
 
 ### Step 5:
 * Find your Bastion
