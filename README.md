@@ -42,7 +42,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 - Availability Zone 1: Pick 1 AZ
 - Availability Zone 2: Pick a different AZ
 - EC2 Key Pair: Select the Key Pair Name you setup in Step 2.
-- DB User/DB Password/DB Name: Please remember what you input.
+- DB User/DB Password/DB Name: Please remember what you input. Your password must contain letters AND numbers.
 * Wait till the stack creation ready, the status will change to `CREATE_COMPLETE`
 
 ### Step 4:
