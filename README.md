@@ -24,7 +24,7 @@ We pick these region becase later we will deploy the whole stack, with correct A
 * To set up AWS Cloud9 go to the AWS console, in the top right click Services and search/click Cloud9.
 * Click Create Environment.
 * Give it this environment a name and change nothing else.
-* Install mysql on this AWS Cloud9 by typeing `sudo yum install mysql`
+* Install mysql on this AWS Cloud9 by typing `sudo yum install mysql` in the terminal at the bottom portion of the screen.
 
 ### Step 1:
 Switch Region on the AWS console, a drag down menu near right-up corner.
