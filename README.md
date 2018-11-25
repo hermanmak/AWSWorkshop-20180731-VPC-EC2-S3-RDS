@@ -49,6 +49,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 - Availability Zone 1: Pick 1 AZ
 - Availability Zone 2: Pick a different AZ
 - EC2 Key Pair: Select the Key Pair Name you setup in Step 2.
+- DB type choose mySql
 - DB User/DB Password/DB Name: Please remember what you input. **Your password must contain letters AND numbers**
 * Wait till the stack creation ready, the status will change to `CREATE_COMPLETE`
 
@@ -64,15 +65,15 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * Find your Bastion
 * Check the CloudFormation Stack, there will be a nested stack name as "bastion"
 * Inside your VPC created in Step 4, there is new EC2 in public subnet.
-* You can try to remote into that instance.
+* You can try to remote into that instance from the AWS Cloud9's terminal we created in step 1.
 * use SSH `ssh -i XXXX.pem ec2-user@YOUR_BASTION_IP`
 
 ### Step 6:
 * Find your RDS (or Aurora)
-* Check the CloudFormation Stack, there will be a nested stack name as "bastion"
+* Check the CloudFormation Stack, there will be a nested stack name as "rds"
 * Did you remember the account and password you set in the cloudformation?
 * try to login into your database with following command 
-* `mysql -u DBUSER -h DBADDRESS -p `
+* `mysql -h <RDS ENDPOINT> -P 3306 -u DBUSER -h DBADDRESS -p `
 
 ### Step 7:
 * Try to create a web server and backend server
