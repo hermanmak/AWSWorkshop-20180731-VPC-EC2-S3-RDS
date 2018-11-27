@@ -70,7 +70,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * Check the CloudFormation Stack, there will be a nested stack name as "rds"
 * Did you remember the account and password you set in the cloudformation?
 * try to login into your database with following command 
-* Install mysql on this AWS Cloud9 by typing `sudo yum install mysql` in the terminal at the bottom portion of the screen.
+* Install mysql on this Bastion by typing `sudo yum install mysql` in the terminal at the bottom portion of the screen.
 * `mysql -h <RDS ENDPOINT> -P 3306 -u DBUSER -p `
 
 ### Step 7:
