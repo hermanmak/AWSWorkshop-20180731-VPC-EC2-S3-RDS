@@ -70,7 +70,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * Check the CloudFormation Stack, there will be a nested stack name as "rds"
 * Did you remember the account and password you set in the cloudformation?
 * try to login into your database with following command 
-* `mysql -h <RDS ENDPOINT> -P 3306 -u DBUSER -h DBADDRESS -p `
+* `mysql -h <RDS ENDPOINT> -P 3306 -u DBUSER -p `
 
 ### Step 7:
 * Try to create a web server and backend server
