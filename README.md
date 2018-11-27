@@ -37,8 +37,6 @@ For example, we pick **N. Viginia(us-east-1)** for our lab practice.
 * We will copy this PEM file into our AWS Cloud9 IDE created in step 1. In your AWS Cloud9 IDE top menu bar go to `File > Upload Local Files...`
 * Once uploaded, in the AWS Cloud9 IDE console (bottom) find this PEM file and run ``` chmod 0400 XXXXX.pem ```
 
-* If you are windows user, and you should download putty.exe and puttygen.exe from [Here](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html). And also check the document [Here](https://www.ssh.com/ssh/putty/windows/puttygen) if you don't know how to convert .pem to .ppk
-
 ### Step 3:
 * Create cloudformation stack: **AWS Console > Cloudformation > Create Stack > from S3 template >
 https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-workshop-20180731-vpc-bastion-rds.cfn.yml**
