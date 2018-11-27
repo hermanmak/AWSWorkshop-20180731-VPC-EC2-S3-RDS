@@ -34,9 +34,8 @@ For example, we pick **N. Viginia(us-east-1)** for our lab practice.
 * Check if you already have a EC2 Key pair in your selected region. 
 * If not, create one through **AWS Console > EC2 > Key Pairs > Create Key Pair**. 
 * Remember to download the private key(.pem) and well saved. 
-* In usual, we will move it into ~/.ssh/ sub-folder in your home directory.
-* To make it secure, remeber to change the privilege with command 
-``` chmod 0400 XXXXX.pem ```
+* We will copy this PEM file into our AWS Cloud9 IDE created in step 1. In your AWS Cloud9 IDE top menu bar go to `File > Upload Local Files...`
+* Once uploaded, in the AWS Cloud9 IDE console (bottom) find this PEM file and run ``` chmod 0400 XXXXX.pem ```
 
 * If you are windows user, and you should download putty.exe and puttygen.exe from [Here](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html). And also check the document [Here](https://www.ssh.com/ssh/putty/windows/puttygen) if you don't know how to convert .pem to .ppk
 
