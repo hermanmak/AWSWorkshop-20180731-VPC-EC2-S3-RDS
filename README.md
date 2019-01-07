@@ -66,7 +66,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 * use SSH `ssh -i XXXX.pem ec2-user@YOUR_BASTION_IP`
 
 ### Step 6:
-* Find your RDS (or Aurora)
+* Find your RDS
 * Check the CloudFormation Stack, there will be a nested stack name as "rds"
 * Did you remember the account and password you set in the cloudformation?
 * try to login into your database with following command 
