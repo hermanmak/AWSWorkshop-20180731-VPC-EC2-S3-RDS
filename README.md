@@ -76,7 +76,7 @@ https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-work
 ### Step 7:
 * Try to create a web server and backend server
 * Create cloudformation stack: **AWS Console > Cloudformation > Create Stack > from S3 template >
-https://s3-ap-northeast-1.amazonaws.com/workshop-data-public/cloudformation-workshop-20180731-alb-ec2.cfn.yml**
+https://s3-ap-southeast-1.amazonaws.com/workshop-data-public-2019/AWSWorkshop-20180731-VPC-EC2-S3-RDS/cloudformation-workshop-20190116-alb-ec2.cfn.yml**
 * For the stack configuration:
 - Stack Name: Whatever you want to name, suggest we have "EC2" within the Name
 - Key Name: Pick the same name from Step 2.
